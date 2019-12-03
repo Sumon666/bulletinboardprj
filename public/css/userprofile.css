@@ -1,0 +1,51 @@
+form {
+  border: 1px solid black;
+  border-collapse: collapse;
+  width: 106%;
+  height: 300px;
+  margin-left: -20px;
+  margin-right: -25px;
+  margin-top: -19px;
+  margin-bottom: -20px;
+}
+
+table {
+  border-bottom: 1px solid black;
+  width: 100%;
+}
+th {
+  border-left: 1px solid black;
+}
+.title {
+  width: 25%;
+  height: 10px;
+  font-size: 20px;
+}
+.mintitle {
+  padding-top: 10px;
+  margin-left: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
+label{
+  margin-top: 20px;
+  margin-left: 30px;
+}
+.txtname {
+  margin-left: 120px;
+}
+.txtemail {
+  margin-left: 65px;
+}
+.txttype {
+  margin-left: 130px;
+}
+.txtphone {
+  margin-left: 120px;
+}
+.txtdob {
+  margin-left: 75px;
+}
+.txtaddress {
+  margin-left: 107px;
+}

@@ -1,0 +1,46 @@
+form {
+  border: 1px solid black;
+  border-collapse: collapse;
+  width: 106%;
+  height: 350px;
+  margin-left: -20px;
+  margin-right: -25px;
+  margin-top: -19px;
+  margin-bottom: -20px;
+}
+
+.headerlink {
+  border-bottom: 1px solid black;
+  width: 100%;
+}
+th {
+  border-left: 1px solid black;
+}
+.title {
+  width: 25%;
+  height: 10px;
+  font-size: 20px;
+}
+.chg {
+  padding-top: 10px;
+  margin-left: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
+.lblimport {
+  margin-top: 42px;
+  margin-left: 20%;
+}
+.upload {
+  border: 1px solid black;
+  margin-top: -10px;
+  margin-left: 20%;
+  width: 50%;
+  height: 110px;
+}
+.file {
+  margin-left: 20px;
+  margin-top: 30px;
+}
+
+

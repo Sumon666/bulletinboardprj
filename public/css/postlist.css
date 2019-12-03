@@ -1,0 +1,26 @@
+.table1 {
+  border: 1px solid black;
+  border-collapse: collapse;
+  width: 106%;
+}
+th,td {
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+  text-align: center;
+  width: 10%;
+  font-size: 14px;
+  padding: 2px;
+}
+.title {
+  width: 25%;
+  height: 10px;
+  font-size: 20px;
+}
+.post {
+  padding-top: 10px;
+  margin-left: 50px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+

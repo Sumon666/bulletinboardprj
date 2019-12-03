@@ -1,0 +1,32 @@
+.bodyframe {
+  border:0.2px solid black;
+  padding-top: 20px;
+  margin-top: -10px;
+}
+
+.titlescm {
+  border:0.2px solid black;
+  height: 50px;
+  border-bottom: none;
+}
+.bodytitle{
+  margin-left: 20%;
+}
+.name {
+  color: red;
+}
+
+.pwd {
+  width: 250px;
+  margin-left: 50px;
+}
+.email {
+  width: 250px;
+  margin-left: 15px;
+}
+#btn {
+  margin-left: 50%;
+  margin-bottom: 10px;
+}
+
+

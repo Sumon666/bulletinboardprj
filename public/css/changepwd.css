@@ -1,0 +1,74 @@
+form {
+  border: 1px solid black;
+  border-collapse: collapse;
+  height: 350px;
+  margin-left: -20px;
+  margin-right: -25px;
+  margin-top: -19px;
+  margin-bottom: -20px;
+}
+table {
+  border-bottom: 1px solid black;
+  width: 100%;
+}
+th {
+  border-left: 1px solid black;
+}
+.title {
+  width: 25%;
+  height: 10px;
+  font-size: 20px;
+}
+.chg {
+  padding-top: 10px;
+  margin-left: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
+label{
+  padding-top: 20px;
+  margin-left: 20px;
+}
+.txtold {
+  margin-top: 10px;
+  margin-left: 125px;
+  width: 40%;
+}
+.txtnew {
+  margin-top: -25px;
+  margin-left: 117px;
+  width: 40%;
+}
+.txtconfirm {
+  margin-top: -25px;
+  margin-left: 62px;
+  width: 40%;
+}
+.allBtn {
+  margin-top: 40px;
+  margin-left: 90px;
+}
+.btnchange {
+  background-color: #3399FF;
+  border: none;
+  color: white;
+  padding: 4px 30px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+}
+.btnclear {
+  background-color: white;
+  border: 1.5px solid lightgreen;
+  color: black;
+  padding: 4px 30px;
+  margin-left: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+}
+

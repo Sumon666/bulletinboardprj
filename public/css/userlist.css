@@ -1,0 +1,43 @@
+.table1 {
+  border: 1px solid black;
+  border-collapse: collapse;
+  width: 106%;
+}
+th,td {
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+  text-align: center;
+  width: 10%;
+  font-size: 10px;
+  padding: 2px;
+}
+.title {
+  width: 20%;
+  height: 10px;
+  font-size: 20px;
+}
+.usertitle {
+  padding-top: 10px;
+  margin-left: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+.txtname {
+  margin-top: 20px;
+  margin-left: 5px;
+  padding-left: 25px;
+}
+.txtemail {
+  margin-top: -29px;
+  margin-left: 3px;
+}
+.dateFrom {
+  margin-top: -29px;
+  margin-left: 3px;
+}
+.dateTo {
+  margin-top: -29px;
+  margin-left: 3px;
+}
+
+
