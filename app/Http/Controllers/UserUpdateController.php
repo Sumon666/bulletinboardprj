@@ -3,24 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use Log;
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\File;
 use App\Contracts\Services\User\UserServiceInterface;
 
+/**
+ * SystemName : Bulletin Board System
+ * ModuleName : User.
+ */
 class UserUpdateController extends Controller
 {
     private $userService;
 
     /**
-     * Create service instance.
+     * Create a new controller instance.
      *
-     * @return void
+     * @param UserServiceInterface $userService
      */
     public function __construct(UserServiceInterface $userService)
     {
@@ -30,26 +30,28 @@ class UserUpdateController extends Controller
     /**
      * Show list specified data on user update form.
      *
-     * @param  \App\Posts  $pdata
+     * @param \App\Posts $pdata
+     *
      * @return \Illuminate\Http\Response
      */
-    public function updateshow($id)
+    public function showUpdateUser($id)
     {
         $user = User::find($id);
         Session::put('Clear', $user);
+
         return view('user.userupdate', ['user' => $user]);
     }
 
     /**
      * Check validate data on user update form.
      *
-     * @param  \App\User  $user
+     * @param \App\User $user
+     *
      * @return \Illuminate\Http\Response
      */
-    public function updateconfirm(Request $request)
+    public function showUpdateConfirm(Request $request)
     {
         if (empty($request->name) || empty($request->email) || empty($request->phone)) {
-
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
                 'email' => 'required|email',
@@ -61,8 +63,7 @@ class UserUpdateController extends Controller
                     ->withErrors($validator)
                     ->withInput();
             }
-        }
-        else {
+        } else {
             $user = new User();
             $user->id = $request->userId;
             $user->name = $request->name;
@@ -71,10 +72,6 @@ class UserUpdateController extends Controller
             $user->phone = $request->phone;
             $user->address = $request->address;
             $user->dob = $request->date;
-
-            if (User::where('name',$request->name)->orwhere('email',$request->email)->exists()) {
-                return redirect()->back()->with('error', 'This user already exists!!')->withInput();
-            }
 
             if ($request->hasfile('image')) {
                 $file = $request->file('image');
@@ -90,6 +87,7 @@ class UserUpdateController extends Controller
                 Session::put('New', $user);
                 $data = Session::get('New');
             }
+
             return view('user.userupdateconfirm')->with('udata', $data);
         }
     }
@@ -97,21 +95,22 @@ class UserUpdateController extends Controller
     /**
      * Update created user data in db.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function updateUserData(Request $request)
     {
         if (Session::has('Create')) {
             $rows = Session::get('Create');
             $this->userService->updateuser($rows);
             Session::forget('Create');
-        }
-        elseif (Session::has('New')) {
+        } elseif (Session::has('New')) {
             $rows = Session::get('New');
             $this->userService->updateuser($rows);
             Session::forget('New');
         }
+
         return redirect('/userlist');
     }
 
@@ -120,14 +119,15 @@ class UserUpdateController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function canceleditdata(Request $request)
+    public function cancelUpdateData(Request $request)
     {
         //cancelupdatedata
         if (Session::has('Create')) {
             $data = Session::get('Create');
-        }else {
+        } else {
             $data = Session::get('New');
         }
+
         return view('user.userupdate', ['user' => $data]);
     }
 
@@ -136,7 +136,7 @@ class UserUpdateController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function clearuser(Request $request)
+    public function clearUpdateData(Request $request)
     {
         //clear user update data
         $cedit = Session::get('Clear');
@@ -147,6 +147,7 @@ class UserUpdateController extends Controller
         $cedit->dob = '';
         $cedit->address = '';
         Session::forget('Clear');
+
         return view('user.userupdate', ['user' => $cedit]);
     }
 }

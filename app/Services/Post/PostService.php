@@ -2,8 +2,6 @@
 
 namespace App\Services\Post;
 
-use App\Posts;
-use Log;
 use App\Contracts\Dao\Post\PostDaoInterface;
 use App\Contracts\Services\Post\PostServiceInterface;
 use Illuminate\Http\Request;
@@ -13,9 +11,9 @@ class PostService implements PostServiceInterface
     private $postDao;
 
     /**
-     * Class Constructor
-     * @param OperatorPostDaoInterface
-     * @return
+     * Constructor.
+     *
+     * @param PostDaoInterface $postDao
      */
     public function __construct(PostDaoInterface $postDao)
     {
@@ -23,8 +21,10 @@ class PostService implements PostServiceInterface
     }
 
     /**
-     * Create Post
+     * Create Post.
+     *
      * @param $data
+     *
      * @return
      */
     public function addPost($data)
@@ -33,8 +33,10 @@ class PostService implements PostServiceInterface
     }
 
     /**
-     * Get Post List
+     * Get Post List.
+     *
      * @param
+     *
      * @return $plist
      */
     public function getList()
@@ -43,8 +45,10 @@ class PostService implements PostServiceInterface
     }
 
     /**
-     * Get Post List
+     * Get Post List.
+     *
      * @param $sdata
+     *
      * @return $plist
      */
     public function searchPost($sdata)
@@ -53,8 +57,10 @@ class PostService implements PostServiceInterface
     }
 
     /**
-     * Get Post detail
+     * Get Post detail.
+     *
      * @param $title
+     *
      * @return $dlist
      */
     public function getPostDetail($title)
@@ -63,8 +69,10 @@ class PostService implements PostServiceInterface
     }
 
     /**
-     * Update post data
+     * Update post data.
+     *
      * @param Request $request
+     *
      * @return $request
      */
     public function update($rows)
@@ -73,8 +81,10 @@ class PostService implements PostServiceInterface
     }
 
     /**
-     * Delete Post
+     * Delete Post.
+     *
      * @param $id
+     *
      * @return
      */
     public function delete($id)
@@ -82,9 +92,11 @@ class PostService implements PostServiceInterface
         return $this->postDao->delete($id);
     }
 
-     /**
-     * Get uploadcsv
+    /**
+     * Get uploadcsv.
+     *
      * @param
+     *
      * @return
      */
     public function getUploadCSV($importData_arr)
