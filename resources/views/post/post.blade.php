@@ -22,11 +22,6 @@
                       {{ __('User') }}
                     </a>
                   </th>
-                  <th>
-                    <a class="btn btn-link" href="{{ url('postlist') }}">
-                      {{ __('Posts') }}
-                    </a>
-                  </th>
                   <th width="20%"></th>
                   <th>{{ Auth::user()->name }}</th>
                   <th>
