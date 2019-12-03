@@ -43,7 +43,8 @@ class LoginController extends Controller
     /**
      * Create a new controller instance for login.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return void
      */
     public function login(Request $request)
@@ -64,10 +65,10 @@ class LoginController extends Controller
         if (Auth::attempt(['email' => $email, 'password' => $password, 'type' => 0])) {
             return redirect('postlist')
                 ->with('success', 'login success');
-        }else if (Auth::attempt(['email' => $email, 'password' => $password, 'type' => 1])) {
+        } elseif (Auth::attempt(['email' => $email, 'password' => $password, 'type' => 1])) {
             return redirect('postlist')
                 ->with('success', 'login success');
-        }else {
+        } else {
             return redirect()->intended('login')
                 ->with('loginError', 'Email or password is incorrect');
         }

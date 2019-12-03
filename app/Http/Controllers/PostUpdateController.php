@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Posts;
-use Log;
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use App\Contracts\Services\Post\PostServiceInterface;
 
+/**
+ * SystemName : Bulletin Board System
+ * ModuleName : Post.
+ */
 class PostUpdateController extends Controller
 {
     private $postService;
@@ -19,7 +20,7 @@ class PostUpdateController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @return void
+     * @param PostServiceInterface $postService
      */
     public function __construct(PostServiceInterface $postService)
     {
@@ -31,41 +32,44 @@ class PostUpdateController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function clearpost(Request $request)
+    public function clearUpdatePost(Request $request)
     {
         //clear post
         $d = Session::get('Clear');
         $d->title = '';
         $d->description = '';
         Session::forget('Clear');
+
         return view('post.postupdate', ['ptt' => $d]);
     }
 
     /**
      * Show the specified list data on update form.
      *
-     * @param  \App\Posts  $post
+     * @param \App\Posts $post
+     *
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function showUpdatePost($id)
     {
         $post = Posts::find($id);
         Session::put('Clear', $post);
+
         return view('post.postupdate', ['ptt' => $post]);
     }
 
     /**
-     * Check validate data from update form
+     * Check validate data from update form.
      *
-     * @param  \App\Posts  $pdata
+     * @param \App\Posts $pdata
+     *
      * @return \Illuminate\Http\Response
      */
-    public function confirm(Request $request)
+    public function checkUpdatePost(Request $request)
     {
         if (isset($request->title) && isset($request->description)) {
-
             if (Posts::where('title', $request->title)->exists()) {
-                return back()->with('postError', 'Post already exists!!')->withInput();
+                return back()->with(['postError' => trans('messages.e_0001')])->withInput();
             }
 
             $cdata = new Posts();
@@ -81,16 +85,16 @@ class PostUpdateController extends Controller
                 Session::put('New', $cdata);
                 $data = Session::get('New');
             }
+
             return view('post.postupdateconfirm')->with(['pdata' => $data]);
-        }
-        else {
+        } else {
             $validator = Validator::make($request->all(), [
                 'title' => 'required|max:255',
                 'description' => 'required',
             ]);
 
             if ($validator->fails()) {
-                return redirect('postupdate')
+                return redirect()->back()
                     ->withErrors($validator)
                     ->withInput();
             }
@@ -102,35 +106,37 @@ class PostUpdateController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function cancelupdate(Request $request)
+    public function cancelUpdate(Request $request)
     {
         //cancel post
         if (Session::has('Upost')) {
             $data = Session::get('Upost');
-        }else {
+        } else {
             $data = Session::get('New');
         }
+
         return view('post.postupdate')->with(['ptt' => $data]);
     }
 
     /**
      * Update created post data in db.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function updatePost(Request $request)
     {
         if (Session::has('Upost')) {
             $rows = Session::get('Upost');
             $this->postService->update($rows);
             Session::forget('Upost');
-        }
-        elseif (Session::has('New')) {
+        } elseif (Session::has('New')) {
             $rows = Session::get('New');
             $this->postService->update($rows);
             Session::forget('New');
         }
+
         return redirect('/postlist');
     }
 }

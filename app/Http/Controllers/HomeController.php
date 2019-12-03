@@ -2,24 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Log;
 use Auth;
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Controllers\Controller;
 
+/**
+ * SystemName : Bulletin Board System
+ * ModuleName : User.
+ */
 class HomeController extends Controller
 {
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {
-        // $this->middleware(['auth', 'verified']);
-        $this->middleware('auth');
+        $this->middleware(['auth', 'verified']);
     }
 
     /**
@@ -33,30 +32,28 @@ class HomeController extends Controller
     }
 
     /**
-     * Check validate data and change password
+     * Check validate data and change password.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function checkpassword(Request $request)
+    public function checkPassword(Request $request)
     {
-        if (isset($request->current) && isset($request->new)) {
+        if (isset($request->current) || isset($request->new) || isset($request->confirm)) {
             if (!(Hash::check($request->get('current'), Auth::user()->password))) {
                 // The passwords matches
-                return redirect()->back()->with("error","Your current password does not matches with the password you provided. Please try again.");
+                return redirect()->back()->with(['error' => trans('messages.e_0003')]);
             }
 
-            if(strcmp($request->get('current'), $request->get('new')) == 0){
+            if (strcmp($request->get('current'), $request->get('new')) == 0) {
                 //old password and new password are same
-                return redirect()->back()->with("error","New Password cannot be same as your current password. Please choose a different password.");
+                return redirect()->back()->with(['error' => trans('messages.e_0004')]);
             }
 
-            if (strcmp($request->get('new'), $request->get('confirm')) != 0){
+            if (strcmp($request->get('new'), $request->get('confirm')) != 0) {
                 //Confirm password and new password are not same
-                return redirect()->back()->with("error","New Password and Confirm password must be same.");
+                return redirect()->back()->with(['error' => trans('messages.e_0005')]);
             }
-
-        }
-        else {
+        } else {
             $validator = Validator::make($request->all(), [
                 'current' => 'required',
                 'new' => 'required|min:8|regex:/^(?=S*[A-Z])(?=S*[0-9])/',
@@ -64,7 +61,7 @@ class HomeController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return redirect('changePassword')
+                return redirect('/changepassword')
                     ->withErrors($validator)
                     ->withInput();
             }
@@ -74,7 +71,7 @@ class HomeController extends Controller
         $user->password = bcrypt($request->get('new'));
         $user->save();
 
-        return redirect('postlist')->with("success","Password changed successfully !");
+        return redirect('postlist')->with(['success' => trans('messages.m_0002')]);
     }
 
     /**
@@ -82,13 +79,13 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function clearpassword(Request $request)
+    public function clearPassword(Request $request)
     {
         //clear password
         $request->current = '';
         $request->new = '';
         $request->confirm = '';
-        return redirect('/changePassword');
-    }
 
+        return redirect('/changepassword');
+    }
 }

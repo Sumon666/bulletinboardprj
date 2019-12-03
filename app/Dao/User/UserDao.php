@@ -5,17 +5,16 @@ namespace App\Dao\User;
 use App\User;
 use Auth;
 use Config;
-use Log;
 use DateTime;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Contracts\Dao\User\UserDaoInterface;
 
 class UserDao implements UserDaoInterface
 {
     /**
-     * Add new user
+     * Add new user.
+     *
      * @param $data
+     *
      * @return
      */
     public function addUser($data)
@@ -24,10 +23,9 @@ class UserDao implements UserDaoInterface
         $user->name = $data->name;
         $user->email = $data->email;
         $user->password = bcrypt($data->password);
-        if ($data->type=="Admin") {
+        if ($data->type == 'Admin') {
             $user->type = 0;
-        }
-        else {
+        } else {
             $user->type = 1;
         }
         $user->phone = $data->phone;
@@ -42,8 +40,10 @@ class UserDao implements UserDaoInterface
     }
 
     /**
-     * Get User List
+     * Get User List.
+     *
      * @param
+     *
      * @return $ulist
      */
     public function getUserList()
@@ -52,8 +52,10 @@ class UserDao implements UserDaoInterface
     }
 
     /**
-     * Get search user
+     * Get search user.
+     *
      * @param $data
+     *
      * @return
      */
     public function searchUser(array $data)
@@ -64,18 +66,20 @@ class UserDao implements UserDaoInterface
         $edate = $data[3];
 
         $ulist = User::whereNull('deleted_at')
-            ->where('name', 'LIKE', '%' . $name . '%')
-            ->where('email', 'LIKE', '%' . $email . '%')
-            ->where('created_at', 'LIKE', '%' . $sdate . '%')
-            ->where('created_at', 'LIKE', '%' . $edate . '%')
+            ->where('name', 'LIKE', '%'.$name.'%')
+            ->where('email', 'LIKE', '%'.$email.'%')
+            ->where('created_at', 'LIKE', '%'.$sdate.'%')
+            ->where('created_at', 'LIKE', '%'.$edate.'%')
             ->paginate(Config::get('constants.pagination.userpaginate'));
 
         return $ulist;
     }
 
     /**
-     * Delete User
+     * Delete User.
+     *
      * @param $id
+     *
      * @return
      */
     public function delete($id)
@@ -87,8 +91,10 @@ class UserDao implements UserDaoInterface
     }
 
     /**
-     * Get User detail
+     * Get User detail.
+     *
      * @param $name
+     *
      * @return $dlist
      */
     public function getUserDetail($name)
@@ -97,8 +103,10 @@ class UserDao implements UserDaoInterface
     }
 
     /**
-     * Update user
+     * Update user.
+     *
      * @param $rows
+     *
      * @return
      */
     public function updateuser($rows)
@@ -107,10 +115,9 @@ class UserDao implements UserDaoInterface
         $editrows = User::find($id);
         $editrows->name = $rows->name;
         $editrows->email = $rows->email;
-        if ($rows->type=="Admin") {
+        if ($rows->type == 'Admin') {
             $editrows->type = 0;
-        }
-        else {
+        } else {
             $editrows->type = 1;
         }
         $editrows->phone = $rows->phone;

@@ -10,67 +10,64 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes(['verify' => true]);
 Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
-
+//home
 Route::get('/home', 'HomeController@index')->name('home');
 
 //login
 Route::get('/', function () {
     return view('auth.login');
 });
-Route::post('login','Auth\LoginController@login');
+Route::post('login', 'Auth\LoginController@login');
 
-//post
+//post & postconfirm
 Route::get('/post', function () {
     return view('post.post');
 });
-
-//postupdate & postconfirm
-Route::get('/postupdate', function () {
-    return view('post.postupdate');
-});
-
-//postconfirm
-Route::get('/clearPost', 'PostController@clearpost');
-Route::get('/postvalidate', 'PostController@show');
-Route::get('/cancelPost', 'PostController@cancelpost');
-//store post
+Route::get('/clearpost', 'PostController@clearPost');
+Route::get('/postvalidate', 'PostController@showPost');
+Route::get('/cancelpost', 'PostController@cancelPost');
 Route::post('/postconfirm', 'PostController@store');
 
 //postlist
 Route::get('/postlist', 'PostController@getPostList');
-//searchlist
-Route::any('/searchPost', 'PostController@getPostList');
+//searchpost
+Route::any('/searchpost', 'PostController@getPostList');
+//postupdate
+Route::get('/postupdate', function () {
+    return view('post.postupdate');
+});
 //deletepost
-Route::any('/deletePost/{id}', 'PostController@delete');
+Route::any('/deletepost/{id}', 'PostController@delete');
 //uploadCSV
-Route::post('/uploadCSV', 'PostController@uploadCSV');
+Route::get('/uploadcsv', function () {
+    return view('csv.uploadcsv');
+});
+Route::post('/uploadcsv', 'PostController@uploadCSV');
 //download
-Route::get('/downloadExcel', 'PostController@downloadExcel');
+Route::get('/downloadexcel', 'PostController@downloadExcel');
 //postDetail
-Route::get('/postDetail/{title}', 'PostController@getPostDetail');
+Route::get('/postdetail/{title}', 'PostController@getPostDetail');
 
-Route::get('/clearPostUpdate', 'PostUpdateController@clearpost');
-Route::get('/postupdate/{id}', 'PostUpdateController@show');
-Route::get('/cancelupdate', 'PostUpdateController@cancelupdate');
-Route::get('/postupdateconfirm', 'PostUpdateController@confirm');
-Route::post('/updatedata', 'PostUpdateController@update');
+//postupdate & updateconfirm
+Route::get('/clearupdatepost', 'PostUpdateController@clearUpdatePost');
+Route::get('/postupdate/{id}', 'PostUpdateController@showUpdatePost');
+Route::get('/cancelupdate', 'PostUpdateController@cancelUpdate');
+Route::get('/postupdateconfirm', 'PostUpdateController@checkUpdatePost');
+Route::post('/updatedata', 'PostUpdateController@updatePost');
 
-//user
+//user & userconfirm
 Route::get('/usercreate', function () {
     return view('user.usercreate');
 });
-
-Route::get('/clearuserinfo', 'UserController@clearuser');
-Route::post('/uservalidate', 'UserController@show');
-Route::get('/canceldata', 'UserController@canceldata');
+Route::get('/clearuserinfo', 'UserController@clearUserData');
+Route::post('/uservalidate', 'UserController@showUserData');
+Route::get('/canceldata', 'UserController@cancelUserData');
 Route::post('/adduser', 'UserController@store');
-
-//userconfirm
 Route::get('/userconfirm', function () {
     return view('user.userconfirm');
 });
@@ -79,33 +76,30 @@ Route::get('/userconfirm', function () {
 Route::get('/userlist', 'UserController@getUserList');
 Route::group(['middleware' => ['admin']], function () {
     //searchlist
-    Route::any('/searchUser', 'UserController@getUserList');
+    Route::any('/searchuser', 'UserController@getUserList');
 });
+Route::any('/deleteuser/{id}', 'UserController@delete');
+Route::get('/userdetail/{name}', 'UserController@getUserDetail');
 
-//deleteuser
-Route::any('/deleteUser/{id}', 'UserController@delete');
-//postDetail
-Route::get('/userDetail/{name}', 'UserController@getUserDetail');
-
+//user update
 Route::get('/userupdate', function () {
     return view('user.userupdate');
 });
-Route::get('/userupdate/{id}', 'UserUpdateController@updateshow');
-Route::get('/clearuseredit', 'UserUpdateController@clearuser');
-Route::post('/updatevalidate', 'UserUpdateController@updateconfirm');
-Route::get('/cancelupdatedata', 'UserUpdateController@canceleditdata');
-Route::post('/updateuserdata', 'UserUpdateController@update');
-
 Route::get('/userupdateconfirm', function () {
     return view('user.userupdateconfirm');
 });
+Route::get('/userupdate/{id}', 'UserUpdateController@showUpdateUser');
+Route::get('/clearuseredit', 'UserUpdateController@clearUpdateData');
+Route::post('/updatevalidate', 'UserUpdateController@showUpdateConfirm');
+Route::get('/cancelupdatedata', 'UserUpdateController@cancelUpdateData');
+Route::post('/updateuserdata', 'UserUpdateController@updateUserData');
 
 //changepassword
-Route::get('/changePassword', function () {
+Route::get('/changepassword', function () {
     return view('auth.changepassword');
 });
-Route::post('/passwordvalidate','HomeController@checkpassword');
-Route::get('/clearpassword', 'HomeController@clearpassword');
+Route::post('/passwordvalidate', 'HomeController@checkPassword');
+Route::get('/clearpassword', 'HomeController@clearPassword');
 
 //user profile
 Route::get('/userprofile', function () {
@@ -119,8 +113,3 @@ Route::get('/email', function () {
 Route::get('/reset/{token}', function () {
     return view('auth.passwords.reset');
 });
-
-Route::get('/uploadcsv', function () {
-    return view('csv.uploadcsv');
-});
-

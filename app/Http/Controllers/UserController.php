@@ -2,25 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\Services\User\UserServiceInterface;
 use App\User;
-use Log;
-use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\File;
-use App\Contracts\Services\User\UserServiceInterface;
+use Illuminate\Support\Facades\Session;
+use Validator;
 
+/**
+ * SystemName : Bulletin Board System
+ * ModuleName : User.
+ */
 class UserController extends Controller
 {
     private $userService;
 
     /**
-     * Create service instance.
+     * Create a new controller instance.
      *
-     * @return void
+     * @param UserServiceInterface $userService
      */
     public function __construct(UserServiceInterface $userService)
     {
@@ -32,7 +33,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function clearuser(Request $request)
+    public function clearUserData(Request $request)
     {
         //clear user data
         $request->name = '';
@@ -44,33 +45,33 @@ class UserController extends Controller
         $request->address = '';
         $request->date = '';
         $request->image = '';
+
         return view('user.usercreate');
     }
 
     /**
      * Check validate usercreate data and pass data to confirm form.
      *
-     * @param  \App\User  $user
+     * @param \App\User $user
+     *
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function showUserData(Request $request)
     {
         if (empty($request->name) || empty($request->email) || empty($request->password) || empty($request->confirm)) {
-
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
-                 'email' => 'required|email',
-                 'password' => 'required|string|min:8|regex:/^(?=S*[A-Z])(?=S*[0-9])/',
-                 'confirm' => 'required',
+                'email' => 'required|email',
+                'password' => 'required|string|min:8|regex:/^(?=S*[A-Z])(?=S*[0-9])/',
+                'confirm' => 'required',
             ]);
 
-             if ($validator->fails()) {
-                 return redirect('usercreate')
-                     ->withErrors($validator)
-                     ->withInput();
+            if ($validator->fails()) {
+                return redirect('usercreate')
+                    ->withErrors($validator)
+                    ->withInput();
             }
-        }
-        else {
+        } else {
             $user = new User();
             $user->name = $request->name;
             $user->email = $request->email;
@@ -81,12 +82,12 @@ class UserController extends Controller
             $user->address = $request->address;
             $user->dob = $request->date;
 
-            if (User::where('name',$request->name)->orwhere('email',$request->email)->exists()) {
-                return redirect()->back()->with('error', 'This user already exists!!')->withInput();
+            if (User::where('name', $request->name)->orwhere('email', $request->email)->exists()) {
+                return redirect()->back()->with(['userError' => trans('messages.e_0007')])->withInput();
             }
-            if (strcmp($request->get('password'), $request->get('confirm')) != 0){
+            if (strcmp($request->get('password'), $request->get('confirm')) != 0) {
                 //Confirm password and new password are not same
-                return redirect()->back()->with("error","New Password and confirm password must be same.");
+                return redirect()->back()->with(['userError' => trans('messages.e_0008')]);
             }
 
             if ($request->hasfile('image')) {
@@ -103,6 +104,7 @@ class UserController extends Controller
                 Session::put('New', $user);
                 $data = Session::get('New');
             }
+
             return view('user.userconfirm')->with('udata', $data);
         }
     }
@@ -112,12 +114,12 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function canceldata(Request $request)
+    public function cancelUserData(Request $request)
     {
         //cancelconfirmdata
         if (Session::has('Create')) {
             $data = Session::get('Create');
-        }else {
+        } else {
             $data = Session::get('New');
         }
 
@@ -127,7 +129,8 @@ class UserController extends Controller
     /**
      * Store new user data in db.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -136,11 +139,12 @@ class UserController extends Controller
             $data = Session::get('Create');
             $this->userService->addUser($data);
             Session::forget('Create');
-        }elseif (Session::has('New')) {
+        } elseif (Session::has('New')) {
             $data = Session::get('New');
             $this->userService->addUser($data);
             Session::forget('New');
         }
+
         return redirect('/userlist');
     }
 
@@ -159,35 +163,42 @@ class UserController extends Controller
 
         if ($data[0] != null || $data[1] != null || $data[2] != null || $data[3] != null) {
             $ulist = $this->userService->searchUser($data);
-            return view('user.userlist',['data'=>$ulist]);
-        }elseif ($data[0] == null || $data[1] == null || $data[2] == null || $data[3] == null) {
+
+            return view('user.userlist', ['data' => $ulist]);
+        } elseif ($data[0] == null || $data[1] == null || $data[2] == null || $data[3] == null) {
             $ulist = $this->userService->getUserList();
-            return view('user.userlist',['data'=>$ulist]);
-        }else {
-            return view('user.userlist')->with('error', 'No Details found. Try to search again !')->withInput();
+
+            return view('user.userlist', ['data' => $ulist]);
+        } else {
+            return view('user.userlist')->with(['listInfo' => trans('messages.m_0001')])->withInput();
         }
     }
 
     /**
-     * Remove user data
+     * Remove user data.
      *
      * @param $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function delete($id)
     {
         $this->userService->delete($id);
+
         return redirect('/userlist');
     }
 
     /**
-     * Get user detail
+     * Get user detail.
+     *
      * @param $name
+     *
      * @return \Illuminate\Http\Response
      */
     public function getUserDetail($name)
     {
         $dlist = $this->userService->getUserDetail($name);
-        return view('user.userDetail', ['dlist'=>$dlist]);
+
+        return view('user.userDetail', ['dlist' => $dlist]);
     }
 }

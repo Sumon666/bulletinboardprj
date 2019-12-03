@@ -5,7 +5,6 @@ namespace App\Services\User;
 use App\Contracts\Dao\User\UserDaoInterface;
 use App\Contracts\Services\User\UserServiceInterface;
 use App\User;
-use Auth;
 use Illuminate\Http\Request;
 
 class UserService implements UserServiceInterface
@@ -13,9 +12,9 @@ class UserService implements UserServiceInterface
     private $userDao;
 
     /**
-     * Class Constructor
-     * @param OperatorUserDaoInterface
-     * @return
+     * Constructor.
+     *
+     * @param UserDaoInterface $userDao
      */
     public function __construct(UserDaoInterface $userDao)
     {
@@ -23,8 +22,10 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * Get User List
+     * Get User List.
+     *
      * @param Request $request
+     *
      * @return $request
      */
     public function addUser($data)
@@ -33,8 +34,10 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * Get User List
+     * Get User List.
+     *
      * @param
+     *
      * @return $ulist
      */
     public function getUserList()
@@ -43,8 +46,10 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * Get User List
+     * Get User List.
+     *
      * @param $data
+     *
      * @return $ulist
      */
     public function searchUser($data)
@@ -53,8 +58,10 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * Delete User
+     * Delete User.
+     *
      * @param $id
+     *
      * @return
      */
     public function delete($id)
@@ -63,8 +70,10 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * Get User detail
+     * Get User detail.
+     *
      * @param $name
+     *
      * @return $dlist
      */
     public function getUserDetail($name)
@@ -73,8 +82,10 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * Update user data
+     * Update user data.
+     *
      * @param Request $request
+     *
      * @return $request
      */
     public function updateuser($rows)
